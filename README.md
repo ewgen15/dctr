@@ -40,4 +40,15 @@ After Node is installed, **open a new terminal** and continue with the steps bel
    ```
 
 The app runs with Vite + React and uses Tailwind CSS and Radix UI components.
+
+---
+
+## GitHub Pages
+
+The site is set up to deploy to **GitHub Pages** on every push to `main`.
+
+**One-time setup:** In the repo on GitHub go to **Settings → Pages**. Under "Build and deployment", set **Source** to **GitHub Actions**.
+
+**Live URL (after first deploy):**  
+https://ewgen15.github.io/dctr/
   

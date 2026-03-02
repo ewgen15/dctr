@@ -5,7 +5,8 @@ import VisitDetails from "./pages/VisitDetails";
 import DoctorList from "./pages/DoctorList";
 import DoctorProfile from "./pages/DoctorProfile";
 
-export const router = createBrowserRouter([
+export const router = createBrowserRouter(
+  [
   {
     path: "/",
     Component: Home,
@@ -26,4 +27,6 @@ export const router = createBrowserRouter([
     path: "/visit/:id",
     Component: VisitDetails,
   },
-]);
+],
+  { basename: '/dctr' }
+);
