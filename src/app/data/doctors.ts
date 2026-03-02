@@ -1,0 +1,40 @@
+export const DOCTORS = [
+  {
+    id: '1',
+    name: 'Олександр Петренко',
+    photo: 'https://images.unsplash.com/photo-1659353887019-b142198f2668?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
+    specialties: 'Кардіолог',
+    rating: 4.8,
+    reviewsCount: 124,
+    experienceYears: 12,
+    consultationPrice: 1200,
+    address: 'Златоустівська, 7',
+    nearestSlot: 'сьогодні о 13:00',
+  },
+  {
+    id: '2',
+    name: 'Наталія Коваленко',
+    photo: 'https://images.unsplash.com/photo-1659353888352-5dbb14b80eca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
+    specialties: 'Терапевт',
+    rating: 4.9,
+    reviewsCount: 89,
+    experienceYears: 8,
+    consultationPrice: 900,
+    address: 'вул. Хрещатик, 22',
+    nearestSlot: 'завтра о 10:00',
+  },
+  {
+    id: '3',
+    name: 'Дмитро Савченко',
+    photo: 'https://images.unsplash.com/photo-1758653500342-5476c8ec3da6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400',
+    specialties: 'Стоматолог',
+    rating: 4.7,
+    reviewsCount: 56,
+    experienceYears: 15,
+    consultationPrice: 1500,
+    address: 'вул. Велика Васильківська, 72',
+    nearestSlot: 'сьогодні о 16:30',
+  },
+] as const;
+
+export type Doctor = (typeof DOCTORS)[number];
