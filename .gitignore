@@ -2,7 +2,8 @@
 node_modules/
 
 # Build
-dist/
+dist
+storybook-static/
 build/
 
 # Local env

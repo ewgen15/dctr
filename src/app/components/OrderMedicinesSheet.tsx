@@ -79,20 +79,20 @@ export default function OrderMedicinesSheet({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="bottom">
-      <DrawerContent className="bg-white max-h-[85vh] rounded-t-2xl border-t border-[#E0E0E0] focus-visible:outline-none">
+      <DrawerContent className="bg-card max-h-[85vh] rounded-t-2xl border-t border-border focus-visible:outline-none">
         <div className="overflow-y-auto flex flex-col flex-1 min-h-0">
           {/* Header */}
           <DrawerHeader className="flex flex-row items-start justify-between gap-4 pb-2 pt-1 px-5">
             <div className="flex-1 pr-8">
-              <DrawerTitle className="text-xl font-bold text-[#333]">
+              <DrawerTitle className="text-xl font-bold text-foreground">
                 Замовити ліки
               </DrawerTitle>
-              <DrawerDescription className="text-sm text-[#8C8C8C] mt-0.5">
+              <DrawerDescription className="text-sm text-muted-foreground mt-0.5">
                 {PRESCRIPTION_MEDS.length} препарат(ів) з призначення
               </DrawerDescription>
             </div>
             <DrawerClose
-              className="absolute top-5 right-5 rounded-full p-1.5 text-[#8C8C8C] hover:bg-[#F0F0F0] hover:text-[#333]"
+              className="absolute top-5 right-5 rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
               aria-label="Закрити"
             >
               <X className="w-5 h-5" />
@@ -104,12 +104,12 @@ export default function OrderMedicinesSheet({
             <section>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#EBF7F6] flex items-center justify-center">
-                    <Pill className="w-4 h-4 text-[#0B7A75]" />
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Pill className="w-4 h-4 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-[#333]">Ваше призначення</h3>
+                  <h3 className="font-semibold text-foreground">Ваше призначення</h3>
                 </div>
-                <span className="text-[#0B7A75] font-semibold">
+                <span className="text-primary font-semibold">
                   ~{TOTAL_ESTIMATE} грн
                 </span>
               </div>
@@ -117,14 +117,14 @@ export default function OrderMedicinesSheet({
                 {PRESCRIPTION_MEDS.map((med) => (
                   <li
                     key={med.name}
-                    className="flex items-center justify-between py-2 border-b border-[#F0F0F0] last:border-0"
+                    className="flex items-center justify-between py-2 border-b border-border last:border-0"
                   >
-                    <span className="text-sm text-[#333]">{med.name}</span>
+                    <span className="text-sm text-foreground">{med.name}</span>
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">{med.price} грн</span>
                       <button
                         type="button"
-                        className="text-sm text-[#0B7A75] font-medium hover:underline"
+                        className="text-sm text-primary font-medium hover:underline"
                       >
                         змінити
                       </button>
@@ -136,15 +136,15 @@ export default function OrderMedicinesSheet({
 
             {/* Sort */}
             <section>
-              <p className="text-sm text-[#333] mb-2">Сортувати:</p>
+              <p className="text-sm text-foreground mb-2">Сортувати:</p>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => setSortBy('distance')}
                   className={`px-4 py-2 rounded-xl text-sm font-medium ${
                     sortBy === 'distance'
-                      ? 'bg-[#0B7A75] text-white'
-                      : 'bg-white text-[#0B7A75] border border-[#0B7A75]'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-card text-primary border border-primary'
                   }`}
                 >
                   За відстанню
@@ -154,8 +154,8 @@ export default function OrderMedicinesSheet({
                   onClick={() => setSortBy('price')}
                   className={`px-4 py-2 rounded-xl text-sm font-medium ${
                     sortBy === 'price'
-                      ? 'bg-[#0B7A75] text-white'
-                      : 'bg-white text-[#0B7A75] border border-[#0B7A75]'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-card text-primary border border-primary'
                   }`}
                 >
                   За ціною
@@ -168,29 +168,29 @@ export default function OrderMedicinesSheet({
               {PHARMACIES.map((pharmacy) => (
                 <div
                   key={pharmacy.id}
-                  className="rounded-xl border border-[#E8E8E8] bg-white p-4 shadow-sm"
+                  className="rounded-xl border border-border bg-card p-4 shadow-sm"
                 >
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold text-[#333]">
+                      <span className="font-semibold text-foreground">
                         {pharmacy.name}
                       </span>
                       {pharmacy.hasDelivery && (
-                        <span className="inline-flex items-center gap-1 text-xs text-[#8C8C8C]">
+                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                           <Truck className="w-3.5 h-3.5" />
                           Доставка
                         </span>
                       )}
                     </div>
-                    <span className="text-[#0B7A75] font-bold text-lg shrink-0">
+                    <span className="text-primary font-bold text-lg shrink-0">
                       {pharmacy.totalPrice} грн
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-[#8C8C8C] mb-2">
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground mb-2">
                     <MapPin className="w-4 h-4 shrink-0" />
                     <span>{pharmacy.address}</span>
                   </div>
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-[#8C8C8C] mb-2">
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mb-2">
                     <span className="flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5" />
                       {pharmacy.distance}
@@ -206,15 +206,15 @@ export default function OrderMedicinesSheet({
                     <span
                       className={`px-2 py-0.5 rounded ${
                         pharmacy.isOpen
-                          ? 'bg-[#E8F5E9] text-[#2E7D32]'
-                          : 'bg-[#FFEBEE] text-[#C62828]'
+                          ? 'bg-success/20 text-success'
+                          : 'bg-destructive/20 text-destructive'
                       }`}
                     >
                       {pharmacy.isOpen ? 'Відчинено' : 'Закрито'}
                     </span>
                   </div>
                   {pharmacy.allAvailable && (
-                    <div className="flex items-center gap-2 text-sm text-[#4CAF50]">
+                    <div className="flex items-center gap-2 text-sm text-success">
                       <CheckCircle2 className="w-4 h-4 shrink-0" />
                       <span>Всі препарати в наявності</span>
                     </div>
