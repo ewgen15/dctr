@@ -28,5 +28,6 @@ export const router = createBrowserRouter(
     Component: VisitDetails,
   },
 ],
-  { basename: '/dctr' }
+  // У dev BASE_URL = '/', на продакшені (build) = '/dctr/'
+  { basename: (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '/' }
 );

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useState, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router';
 import { MapPin } from 'lucide-react';
 import { DOCTORS } from '../data/doctors';
 import type { Doctor } from '../data/doctors';
@@ -54,8 +54,20 @@ function DoctorCard({
 
 export default function DoctorList() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const q = (searchParams.get('q') ?? '').trim().toLowerCase();
   const [filterSpecialty, setFilterSpecialty] = useState(false);
   const [filterAddress, setFilterAddress] = useState(false);
+
+  const filteredDoctors = useMemo(() => {
+    if (!q) return [...DOCTORS];
+    return DOCTORS.filter(
+      (d) =>
+        d.name.toLowerCase().includes(q) ||
+        d.specialties.toLowerCase().includes(q) ||
+        d.address.toLowerCase().includes(q)
+    );
+  }, [q]);
 
   const handleBook = (doctorId: string) => {
     navigate(`/doctors/${doctorId}`);
@@ -99,9 +111,19 @@ export default function DoctorList() {
 
         {/* Doctor cards list */}
         <div className="px-5 space-y-4">
-          {DOCTORS.map((doctor) => (
-            <DoctorCard key={doctor.id} doctor={doctor} onBook={handleBook} />
-          ))}
+          {filteredDoctors.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              {q ? (
+                <>За запитом «{searchParams.get('q')}» нічого не знайдено. Спробуйте інший запит.</>
+              ) : (
+                'Лікарів поки немає.'
+              )}
+            </p>
+          ) : (
+            filteredDoctors.map((doctor) => (
+              <DoctorCard key={doctor.id} doctor={doctor} onBook={handleBook} />
+            ))
+          )}
         </div>
 
         <BottomNav />

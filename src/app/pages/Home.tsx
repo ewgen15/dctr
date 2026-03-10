@@ -1,5 +1,16 @@
-import { Calendar, Clock, MapPin, Video } from 'lucide-react';
+import { useState } from 'react';
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Search,
+  CalendarPlus,
+  Video,
+  FlaskConical,
+  Building2,
+} from 'lucide-react';
 import { useNavigate } from 'react-router';
+import HomeActionCard from '../components/HomeActionCard';
 import BottomNav from '../components/BottomNav';
 import StatusBar from '../components/StatusBar';
 import MobileContainer from '../components/MobileContainer';
@@ -7,12 +18,19 @@ import { VisitCard } from '../components/VisitCard';
 
 export default function Home() {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = () => {
+    const q = searchQuery.trim();
+    if (q) navigate(`/doctors?q=${encodeURIComponent(q)}`);
+    else navigate('/doctors');
+  };
 
   return (
     <MobileContainer>
       <div className="min-h-screen bg-secondary pb-24">
         <StatusBar />
-        
+
         {/* Header */}
         <div className="px-5 pt-4 pb-6">
           <p className="text-muted-foreground text-sm">
@@ -30,7 +48,31 @@ export default function Home() {
               alt="Promo"
               className="absolute inset-0 w-full h-full object-cover opacity-30"
             />
-            <p className="text-white font-bold text-xl relative z-10">Ваше здоров'я - наш пріоритет</p>
+            <p className="text-white font-bold text-xl relative z-10">
+              Ваше здоров'я - наш пріоритет
+            </p>
+          </div>
+        </div>
+
+        {/* Search doctor — перед найближчим записом */}
+        <div className="px-5 mb-4">
+          <div className="flex gap-2 rounded-xl border border-border bg-card px-3 py-2.5 shadow-sm">
+            <Search className="size-5 shrink-0 text-muted-foreground" />
+            <input
+              type="search"
+              placeholder="Спеціальність, ім'я лікаря..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className="min-w-0 flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
+            />
+            <button
+              type="button"
+              onClick={handleSearch}
+              className="shrink-0 text-primary text-sm font-medium"
+            >
+              Знайти
+            </button>
           </div>
         </div>
 
@@ -38,7 +80,7 @@ export default function Home() {
         <div className="px-5 mb-6">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-semibold text-base">Найближчий запис</h2>
-            <button 
+            <button
               onClick={() => navigate('/visits')}
               className="text-primary text-sm"
             >
@@ -61,31 +103,45 @@ export default function Home() {
               { icon: <MapPin className="size-4" />, text: 'MedClinic' },
             ]}
             actions={[
-              { label: 'Деталі', variant: 'primary', onClick: () => navigate('/visit/1') },
+              {
+                label: 'Деталі',
+                variant: 'primary',
+                onClick: () => navigate('/visit/1'),
+              },
               { label: 'Перенести', variant: 'secondary', onClick: () => {} },
             ]}
             onDismiss={() => {}}
           />
         </div>
 
-        {/* Action Buttons */}
-        <div className="px-5 space-y-3">
-          <button
-            onClick={() => navigate('/doctors')}
-            className="w-full border-2 border-primary text-primary py-4 rounded-xl font-medium"
-          >
-            Записатись на прийом
-          </button>
-          <button className="w-full border-2 border-primary text-primary py-4 rounded-xl font-medium flex items-center justify-center gap-2">
-            <Video className="w-5 h-5" />
-            Онлайн консультація
-          </button>
-          <button className="w-full border-2 border-primary text-primary py-4 rounded-xl font-medium">
-            Здати аналізи
-          </button>
-          <button className="w-full border-2 border-primary text-primary py-4 rounded-xl font-medium">
-            Послуги клініки
-          </button>
+        {/* Action cards grid */}
+        <div className="px-5">
+          <div className="grid grid-cols-2 gap-3">
+            <HomeActionCard
+              icon={<CalendarPlus className="size-8" />}
+              title="Записатись на прийом"
+              subtitle="Обрати лікаря"
+              onClick={() => navigate('/doctors')}
+            />
+            <HomeActionCard
+              icon={<Video className="size-8" />}
+              title="Онлайн консультація"
+              subtitle="Розмова з лікарем"
+              onClick={() => {}}
+            />
+            <HomeActionCard
+              icon={<FlaskConical className="size-8" />}
+              title="Здати аналізи"
+              subtitle="Запис або результати"
+              onClick={() => {}}
+            />
+            <HomeActionCard
+              icon={<Building2 className="size-8" />}
+              title="Послуги клініки"
+              subtitle="Перелік послуг"
+              onClick={() => navigate('/services')}
+            />
+          </div>
         </div>
 
         <BottomNav />
