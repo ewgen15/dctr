@@ -4,6 +4,7 @@ import MyVisits from "./pages/MyVisits";
 import VisitDetails from "./pages/VisitDetails";
 import DoctorList from "./pages/DoctorList";
 import DoctorProfile from "./pages/DoctorProfile";
+import Checkout from "./pages/Checkout";
 
 export const router = createBrowserRouter(
   [
@@ -26,6 +27,10 @@ export const router = createBrowserRouter(
   {
     path: "/visit/:id",
     Component: VisitDetails,
+  },
+  {
+    path: "/checkout",
+    Component: Checkout,
   },
 ],
   // У dev BASE_URL = '/', на продакшені (build) = '/dctr/'

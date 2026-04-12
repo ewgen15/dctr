@@ -1,15 +1,26 @@
 import { ArrowLeft, Calendar, Clock, MapPin, Download, ChevronUp } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import StatusBar from '../components/StatusBar';
 import MobileContainer from '../components/MobileContainer';
 import OrderMedicinesSheet from '../components/OrderMedicinesSheet';
 import { VisitCard } from '../components/VisitCard';
+import {
+  PRESCRIBED_MEDS,
+  getActiveOption,
+  getPrescriptionTotalRange,
+} from '../data/prescribedMedications';
 
 export default function VisitDetails() {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(true);
   const [orderMedicinesOpen, setOrderMedicinesOpen] = useState(false);
+  const [selectedOptionByMedId, setSelectedOptionByMedId] = useState<Record<string, string>>({});
+
+  const orderTotalRange = useMemo(
+    () => getPrescriptionTotalRange(selectedOptionByMedId),
+    [selectedOptionByMedId],
+  );
 
   return (
     <MobileContainer>
@@ -87,28 +98,42 @@ export default function VisitDetails() {
           {/* Prescribed Medications */}
           {isExpanded && (
             <div className="bg-card rounded-2xl p-4 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-4 gap-2">
                 <h3 className="font-semibold text-base">Призначені ліки</h3>
-                <span className="text-primary font-semibold">~95 грн</span>
+                <span className="text-primary font-semibold text-right shrink-0">
+                  ~{orderTotalRange.min}–{orderTotalRange.max} грн
+                </span>
               </div>
 
-              <div className="bg-muted rounded-xl p-3 mb-4">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex-1">
-                    <h4 className="font-medium text-sm mb-1">Хлоргексидин (ополіскувач) 0.05%</h4>
-                    <p className="text-xs text-muted-foreground">
-                      Полоскати рот 2 рази на день після чищення зубів протягом 7 днів
-                    </p>
-                  </div>
-                  <span className="text-sm font-semibold ml-2">95 грн</span>
-                </div>
+              <div className="space-y-3 mb-4">
+                {PRESCRIBED_MEDS.map((med) => {
+                  const active = getActiveOption(med, selectedOptionByMedId);
+                  return (
+                    <div key={med.id}>
+                      <div className="rounded-xl bg-muted p-3 shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)]">
+                        <div className="flex flex-wrap items-start justify-between gap-2">
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-medium text-sm leading-snug">{active.name}</h4>
+                            <p className="mt-1 text-xs text-muted-foreground">
+                              <span className="text-foreground/80">За призначенням лікаря: </span>
+                              {med.quantityLabel}
+                            </p>
+                          </div>
+                          <span className="text-sm font-semibold text-primary shrink-0 self-start">
+                            {active.priceMin}–{active.priceMax} грн
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
               <button
                 onClick={() => setOrderMedicinesOpen(true)}
                 className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-medium flex items-center justify-center gap-2 mb-3"
               >
-                Замовити ліки в аптеці поряд
+                Забронювати
                 <span>→</span>
               </button>
 
@@ -194,6 +219,8 @@ export default function VisitDetails() {
         <OrderMedicinesSheet
           open={orderMedicinesOpen}
           onOpenChange={setOrderMedicinesOpen}
+          selectedOptionByMedId={selectedOptionByMedId}
+          onSelectedOptionChange={setSelectedOptionByMedId}
         />
       </div>
     </MobileContainer>
