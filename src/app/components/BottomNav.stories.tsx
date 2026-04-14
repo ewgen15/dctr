@@ -2,11 +2,19 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { MemoryRouter } from "react-router";
 import BottomNav from "./BottomNav";
 
+/** COMPONENT BottomNav у файлі Moblie APP (Storybook Design tab). */
+const FIGMA_BOTTOM_NAV =
+  "https://www.figma.com/design/eUrxfq0FkLzMZFkCLf58r0/Moblie-APP?node-id=145-1177";
+
 const meta: Meta<typeof BottomNav> = {
   title: "Components/BottomNav",
   component: BottomNav,
   parameters: {
     layout: "fullscreen",
+    design: {
+      type: "figma",
+      url: FIGMA_BOTTOM_NAV,
+    },
   },
   decorators: [
     (Story, context) => (

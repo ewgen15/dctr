@@ -10,14 +10,17 @@ import {
   Building2,
 } from 'lucide-react';
 import { useNavigate } from 'react-router';
+import { useI18n } from '../i18n';
 import HomeActionCard from '../components/HomeActionCard';
 import BottomNav from '../components/BottomNav';
 import StatusBar from '../components/StatusBar';
 import MobileContainer from '../components/MobileContainer';
 import { VisitCard } from '../components/VisitCard';
+import { Button } from '../components/ui/button';
 
 export default function Home() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = () => {
@@ -34,10 +37,16 @@ export default function Home() {
         {/* Header */}
         <div className="px-5 pt-4 pb-6">
           <p className="text-muted-foreground text-sm">
-            Вітаємо,{' '}
-            <span className="text-foreground font-bold">Наталіє Сергіївно!</span>
+            {t('home.welcome')}{' '}
+            <span className="text-foreground font-bold">{t('home.userName')}</span>
           </p>
-          <button className="text-primary text-xs mt-1">змінити</button>
+          <Button
+            type="button"
+            variant="ghost"
+            className="mt-1 h-auto p-0 text-xs text-primary hover:bg-transparent"
+          >
+            {t('home.change')}
+          </Button>
         </div>
 
         {/* Banner */}
@@ -48,9 +57,7 @@ export default function Home() {
               alt="Promo"
               className="absolute inset-0 w-full h-full object-cover opacity-30"
             />
-            <p className="text-white font-bold text-xl relative z-10">
-              Ваше здоров'я - наш пріоритет
-            </p>
+            <p className="text-white font-bold text-xl relative z-10">{t('home.banner')}</p>
           </div>
         </div>
 
@@ -60,32 +67,35 @@ export default function Home() {
             <Search className="size-5 shrink-0 text-muted-foreground" />
             <input
               type="search"
-              placeholder="Спеціальність, ім'я лікаря..."
+              placeholder={t('home.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               className="min-w-0 flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
             />
-            <button
+            <Button
               type="button"
+              variant="ghost"
               onClick={handleSearch}
-              className="shrink-0 text-primary text-sm font-medium"
+              className="h-auto shrink-0 p-0 text-sm font-medium text-primary hover:bg-transparent"
             >
-              Знайти
-            </button>
+              {t('home.find')}
+            </Button>
           </div>
         </div>
 
         {/* Upcoming Appointment Card */}
         <div className="px-5 mb-6">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-base">Найближчий запис</h2>
-            <button
+            <h2 className="font-semibold text-base">{t('home.upcomingTitle')}</h2>
+            <Button
+              type="button"
+              variant="ghost"
               onClick={() => navigate('/visits')}
-              className="text-primary text-sm"
+              className="h-auto p-0 text-sm text-primary hover:bg-transparent"
             >
-              Всі записи
-            </button>
+              {t('home.allVisits')}
+            </Button>
           </div>
 
           <VisitCard
@@ -104,11 +114,15 @@ export default function Home() {
             ]}
             actions={[
               {
-                label: 'Деталі',
+                label: t('myVisits.actions.details'),
                 variant: 'primary',
                 onClick: () => navigate('/visit/1'),
               },
-              { label: 'Перенести', variant: 'secondary', onClick: () => {} },
+              {
+                label: t('myVisits.actions.reschedule'),
+                variant: 'secondary',
+                onClick: () => {},
+              },
             ]}
             onDismiss={() => {}}
           />
@@ -119,26 +133,26 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-3">
             <HomeActionCard
               icon={<CalendarPlus className="size-8" />}
-              title="Записатись на прийом"
-              subtitle="Обрати лікаря"
+              title={t('home.actionBook')}
+              subtitle={t('home.actionBookSub')}
               onClick={() => navigate('/doctors')}
             />
             <HomeActionCard
               icon={<Video className="size-8" />}
-              title="Онлайн консультація"
-              subtitle="Розмова з лікарем"
+              title={t('home.actionOnline')}
+              subtitle={t('home.actionOnlineSub')}
               onClick={() => {}}
             />
             <HomeActionCard
               icon={<FlaskConical className="size-8" />}
-              title="Здати аналізи"
-              subtitle="Запис або результати"
+              title={t('home.actionLabs')}
+              subtitle={t('home.actionLabsSub')}
               onClick={() => {}}
             />
             <HomeActionCard
               icon={<Building2 className="size-8" />}
-              title="Послуги клініки"
-              subtitle="Перелік послуг"
+              title={t('home.actionClinic')}
+              subtitle={t('home.actionClinicSub')}
               onClick={() => navigate('/services')}
             />
           </div>

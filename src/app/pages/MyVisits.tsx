@@ -1,13 +1,16 @@
-import { ArrowLeft, Calendar, Clock, MapPin, Video, ChevronDown } from 'lucide-react';
+import { Calendar, Clock, MapPin, Video, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
+import { useI18n } from '../i18n';
 import BottomNav from '../components/BottomNav';
 import StatusBar from '../components/StatusBar';
 import MobileContainer from '../components/MobileContainer';
 import OrderMedicinesSheet from '../components/OrderMedicinesSheet';
+import { ScreenHeader } from '../components/ScreenHeader';
 import { VisitCard } from '../components/VisitCard';
 
 export default function MyVisits() {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const [orderMedicinesOpen, setOrderMedicinesOpen] = useState(false);
 
@@ -16,28 +19,23 @@ export default function MyVisits() {
       <div className="min-h-screen bg-[#f5f5f5] pb-[94px]">
         <StatusBar />
 
-        {/* Header */}
-        <div className="bg-card flex items-center gap-[18px] px-6 py-3 shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)]">
-          <button
-            onClick={() => navigate('/')}
-            className="flex size-6 items-center justify-center text-primary"
-            aria-label="Назад"
-          >
-            <ArrowLeft className="size-6" />
-          </button>
-          <h1 className="text-xl font-semibold leading-[30px] text-foreground">
-            Мої записи
-          </h1>
-        </div>
+        <ScreenHeader
+          variant="backTitle"
+          title={t('myVisits.title')}
+          onBack={() => navigate('/')}
+          elevated
+        />
 
         {/* Date row */}
-        <div className="flex items-center justify-between px-6 py-3 text-xs">
+        <div className="flex items-center justify-between px-5 py-3 text-xs">
           <span className="font-medium text-foreground">24 лютого 2026</span>
-          <span className="font-normal text-muted-foreground">3 запис(ів)</span>
+          <span className="font-normal text-muted-foreground">
+            {t('myVisits.visitsCount', { count: 3 })}
+          </span>
         </div>
 
         {/* Visit cards */}
-        <div className="flex flex-col gap-4 px-6">
+        <div className="flex flex-col gap-4 px-5">
           {/* Заплановано */}
           <VisitCard
             status="scheduled"
@@ -54,8 +52,16 @@ export default function MyVisits() {
               { icon: <MapPin className="size-4" />, text: 'вул. Хрещатик, 22' },
             ]}
             actions={[
-              { label: 'Деталі', variant: 'primary', onClick: () => navigate('/visit/1') },
-              { label: 'Перенести', variant: 'secondary', onClick: () => {} },
+              {
+                label: t('myVisits.actions.details'),
+                variant: 'primary',
+                onClick: () => navigate('/visit/1'),
+              },
+              {
+                label: t('myVisits.actions.reschedule'),
+                variant: 'secondary',
+                onClick: () => {},
+              },
             ]}
           />
 
@@ -72,7 +78,7 @@ export default function MyVisits() {
             infoRows={[
               { icon: <Calendar className="size-4" />, text: '18 лютого 2026' },
               { icon: <Clock className="size-4" />, text: '14:30' },
-              { icon: <Video className="size-4" />, text: 'Онлайн' },
+              { icon: <Video className="size-4" />, text: t('common.online') },
             ]}
             diagnosis={{
               text: 'Гострий бронхіт, неускладнений',
@@ -80,9 +86,13 @@ export default function MyVisits() {
               totalPrice: 550,
             }}
             actions={[
-              { label: 'Замовити ліки', variant: 'primary', onClick: () => setOrderMedicinesOpen(true) },
               {
-                label: 'Про візит',
+                label: t('myVisits.actions.orderMeds'),
+                variant: 'primary',
+                onClick: () => setOrderMedicinesOpen(true),
+              },
+              {
+                label: t('myVisits.actions.aboutVisit'),
                 variant: 'secondary',
                 icon: <ChevronDown className="size-5" />,
                 onClick: () => navigate('/visit/2'),
@@ -106,7 +116,11 @@ export default function MyVisits() {
               { icon: <MapPin className="size-4" />, text: 'вул. Хрещатик, 22' },
             ]}
             actions={[
-              { label: 'Записатись повторно', variant: 'secondary', onClick: () => navigate('/') },
+              {
+                label: t('myVisits.actions.bookAgain'),
+                variant: 'secondary',
+                onClick: () => navigate('/'),
+              },
             ]}
           />
         </div>

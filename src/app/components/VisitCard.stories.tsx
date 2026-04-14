@@ -3,6 +3,10 @@ import { fn } from "@storybook/test";
 import { Calendar, Clock, MapPin, Video, ChevronDown, Phone } from "lucide-react";
 import { VisitCard } from "./VisitCard";
 
+/** Основний компонент у файлі Moblie APP (canvas AI Experiments). */
+const FIGMA_VISIT_CARD =
+  "https://www.figma.com/design/eUrxfq0FkLzMZFkCLf58r0/Moblie-APP?node-id=136-424";
+
 const DOCTOR_CARDIOLOGIST = {
   name: "Олександр Петренко",
   specialty: "Кардіолог",
@@ -22,7 +26,13 @@ const DOCTOR_THERAPIST = {
 const meta: Meta<typeof VisitCard> = {
   title: "Components/VisitCard",
   component: VisitCard,
-  parameters: { layout: "padded" },
+  parameters: {
+    layout: "padded",
+    design: {
+      type: "figma",
+      url: FIGMA_VISIT_CARD,
+    },
+  },
   tags: ["autodocs"],
   decorators: [
     (Story) => (

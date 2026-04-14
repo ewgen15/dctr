@@ -1,10 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "./button";
 
+/** Untitled UI FREE (Figma) — компонент **Button** (усі варіанти Size / Hierarchy / State). */
+const FIGMA_UNTITLED_BUTTON =
+  "https://www.figma.com/design/AoYmfbYqtUXcz8zUqmVLbb?node-id=1038-34411";
+
 const meta: Meta<typeof Button> = {
   title: "UI/Button",
   component: Button,
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    design: {
+      type: "figma",
+      url: FIGMA_UNTITLED_BUTTON,
+    },
+    docs: {
+      description: {
+        component:
+          "Кнопка з дизайн-системи проєкту (Radix Slot + CVA). Токени теми — **Untitled UI** (`untitled-tokens.css`). У Figma орієнтир — **Button** у файлі Untitled UI FREE; мапінг варіантів: `default` → Primary, `secondary` / `outline` → Secondary, `destructive` → Destructive, `ghost` → Tertiary, `link` → Link.",
+      },
+    },
+  },
   tags: ["autodocs"],
   argTypes: {
     variant: {

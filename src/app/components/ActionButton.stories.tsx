@@ -2,10 +2,20 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Video, Stethoscope, FlaskConical, Building2 } from "lucide-react";
 import { ActionButton } from "./ActionButton";
 
+/** Фрейм експерименту (плейсхолдер; окремого COMPONENT у файлі немає). */
+const FIGMA_ACTION_BUTTON_WIP =
+  "https://www.figma.com/design/eUrxfq0FkLzMZFkCLf58r0/Moblie-APP?node-id=147-2116";
+
 const meta: Meta<typeof ActionButton> = {
   title: "Components/ActionButton",
   component: ActionButton,
-  parameters: { layout: "padded" },
+  parameters: {
+    layout: "padded",
+    design: {
+      type: "figma",
+      url: FIGMA_ACTION_BUTTON_WIP,
+    },
+  },
   tags: ["autodocs"],
   decorators: [
     (Story) => (

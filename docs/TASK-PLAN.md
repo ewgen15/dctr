@@ -40,6 +40,29 @@
 
 ---
 
+## Storybook — покриття екранів
+
+Усі роути з `src/app/routes.ts` мають сторінкові stories (`src/app/pages/*.stories.tsx`) для візуальної перевірки та зв’язку з Figma (`parameters.design`, де задано):
+
+| Роут | Сторінка | Storybook | Figma (addon Design) |
+|------|-----------|-------------|----------------------|
+| `/` | `Home` | `Pages/Home` | `143-1016` |
+| `/doctors` | `DoctorList` | `Pages/DoctorList` | `145-1105` |
+| `/doctors/:id` | `DoctorProfile` | `Pages/DoctorProfile` | `146-1748` |
+| `/visits` | `MyVisits` | `Pages/MyVisits` | окремий фрейм — за потреби |
+| `/visit/:id` | `VisitDetails` | `Pages/VisitDetails` | `146-1916` |
+| `/checkout` | `Checkout` | `Pages/Checkout` | немає — додати при синхронізації флоу аптек |
+
+Журнал екранів і кандидати на компоненти: [docs/ui-components-backlog.md](./ui-components-backlog.md).
+
+---
+
+## Експеримент: окремий дизайн-спейс для компонентів (Storybook → Figma)
+
+Окрема **сторінка або Section у Figma** лише для компонентів із Storybook (`Components/*`, `UI/*`), щоб відполірувати їх у дизайні й потім зв’язати з екранами та кодом. Протокол, інвентар і черга: **[storybook-figma-components-experiment.md](./storybook-figma-components-experiment.md)** (англійською: [storybook-figma-components-experiment.en.md](./storybook-figma-components-experiment.en.md)). Розміщення фреймів — за правилами [figma-work-zone](../.cursor/skills/figma-work-zone/SKILL.md). **Статус:** у файлі Moblie APP створено сторінку «Компоненти — Storybook (WIP)» і Section з плейсхолдерами (див. документ, 2026-04-12).
+
+---
+
 ## Підхід
 
 - Швидке прототипування в коді; скріни з коментарями замість відео — ок для синхронізації.

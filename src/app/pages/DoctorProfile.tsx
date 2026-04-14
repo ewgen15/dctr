@@ -1,35 +1,30 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { ArrowLeft } from 'lucide-react';
+import { dictionaries, useI18n } from '../i18n';
 import { DOCTORS } from '../data/doctors';
 import BottomNav from '../components/BottomNav';
 import StatusBar from '../components/StatusBar';
 import MobileContainer from '../components/MobileContainer';
-
-const MOCK_SLOTS = [
-  'сьогодні о 13:00',
-  'сьогодні о 14:00',
-  'сьогодні о 16:30',
-  'завтра о 10:00',
-  'завтра о 11:30',
-];
+import { ScreenHeader } from '../components/ScreenHeader';
 
 export default function DoctorProfile() {
+  const { t, locale } = useI18n();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState<'about' | 'services'>('about');
+  const mockSlots = dictionaries[locale].doctorProfile.slots;
 
   const doctor = DOCTORS.find((d) => d.id === id);
   if (!doctor) {
     return (
       <MobileContainer>
         <div className="min-h-screen bg-secondary flex flex-col items-center justify-center gap-4 px-5">
-          <p className="text-muted-foreground">Лікаря не знайдено</p>
+          <p className="text-muted-foreground">{t('doctorProfile.notFound')}</p>
           <button
             onClick={() => navigate('/doctors')}
             className="text-primary font-medium"
           >
-            Назад до каталогу
+            {t('doctorProfile.backToList')}
           </button>
         </div>
       </MobileContainer>
@@ -41,17 +36,11 @@ export default function DoctorProfile() {
       <div className="min-h-screen bg-secondary pb-24">
         <StatusBar />
 
-        {/* Header */}
-        <div className="px-5 py-4 bg-card flex items-center gap-3">
-          <button
-            onClick={() => navigate('/doctors')}
-            className="text-primary p-1 -ml-1"
-            aria-label="Назад"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <h1 className="text-lg font-semibold text-foreground">каталог</h1>
-        </div>
+        <ScreenHeader
+          variant="backTitle"
+          title={t('doctorProfile.catalogTitle')}
+          onBack={() => navigate('/doctors')}
+        />
 
         <div className="px-5 pb-6">
           {/* Doctor photo */}
@@ -70,7 +59,7 @@ export default function DoctorProfile() {
           <div className="flex items-center justify-between gap-4 mb-4">
             <p className="text-primary font-medium">{doctor.specialties}</p>
             <p className="text-sm text-muted-foreground">
-              {doctor.rating.toFixed(1)} ({doctor.reviewsCount} відгуків)
+              {doctor.rating.toFixed(1)} ({doctor.reviewsCount} {t('doctorProfile.reviews')})
             </p>
           </div>
 
@@ -85,7 +74,7 @@ export default function DoctorProfile() {
                   : 'bg-card text-primary border-primary'
               }`}
             >
-              про лікаря
+              {t('doctorProfile.tabAbout')}
             </button>
             <button
               type="button"
@@ -96,15 +85,17 @@ export default function DoctorProfile() {
                   : 'bg-card text-primary border-primary'
               }`}
             >
-              послуги, які надає
+              {t('doctorProfile.tabServices')}
             </button>
           </div>
 
           {/* Available slots */}
           <div className="bg-card rounded-2xl p-4 shadow-sm border border-border mb-4">
-            <h3 className="font-semibold text-foreground mb-3">доступні слоти</h3>
+            <h3 className="font-semibold text-foreground mb-3">
+              {t('doctorProfile.slotsTitle')}
+            </h3>
             <div className="flex flex-wrap gap-2">
-              {MOCK_SLOTS.map((slot) => (
+              {mockSlots.map((slot) => (
                 <button
                   key={slot}
                   type="button"
@@ -122,12 +113,12 @@ export default function DoctorProfile() {
             onClick={() => navigate('/visits')}
             className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-medium mb-2"
           >
-            записатись
+            {t('doctorProfile.book')}
           </button>
 
           {/* Online consultation */}
           <p className="text-center text-sm text-muted-foreground">
-            онлайн - консультація
+            {t('doctorProfile.onlineHint')}
           </p>
         </div>
 

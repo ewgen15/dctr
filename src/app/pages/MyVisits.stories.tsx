@@ -7,6 +7,12 @@ const meta: Meta<typeof MyVisits> = {
   component: MyVisits,
   parameters: {
     layout: "fullscreen",
+    docs: {
+      description: {
+        component:
+          "Мої записи: список карток візитів, `OrderMedicinesSheet`. Окремий фрейм у Figma можна додати при синхронізації макету.",
+      },
+    },
   },
   decorators: [
     (Story) => (

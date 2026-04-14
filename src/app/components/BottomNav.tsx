@@ -1,15 +1,21 @@
 import { Home, Calendar, PhoneForwarded, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router';
+import { useI18n } from '../i18n';
 
+/**
+ * Нижня навігація (таби з іконками).
+ * @see Figma COMPONENT BottomNav — {@link https://www.figma.com/design/eUrxfq0FkLzMZFkCLf58r0/Moblie-APP?node-id=145-1177}
+ */
 export default function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useI18n();
 
   const navItems = [
-    { icon: Home, label: 'Головна', path: '/' },
-    { icon: Calendar, label: 'Мої візити', path: '/visits' },
-    { icon: PhoneForwarded, label: 'Послуги', path: '/services' },
-    { icon: User, label: 'Профіль', path: '/profile' },
+    { icon: Home, labelKey: 'nav.home' as const, path: '/' },
+    { icon: Calendar, labelKey: 'nav.visits' as const, path: '/visits' },
+    { icon: PhoneForwarded, labelKey: 'nav.services' as const, path: '/services' },
+    { icon: User, labelKey: 'nav.profile' as const, path: '/profile' },
   ];
 
   return (
@@ -37,7 +43,7 @@ export default function BottomNav() {
                   isActive ? 'text-primary' : 'text-foreground'
                 }`}
               >
-                {item.label}
+                {t(item.labelKey)}
               </span>
             </button>
           );

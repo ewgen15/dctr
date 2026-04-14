@@ -41,6 +41,10 @@ After Node is installed, **open a new terminal** and continue with the steps bel
 
 The app runs with Vite + React and uses Tailwind CSS and Radix UI components.
 
+### Текст у інтерфейсі
+
+Підписи **елементів інтерфейсу** (насамперед **кнопок**, а також заголовків екранів, пунктів навігації, чіпів тощо) оформлюємо **з великої літери** (наприклад: «Записатись», «Мої записи», «Підтвердити замовлення»). Довгі речення в описах або підказках можуть йти звичайним реченням з крапкою.
+
 ---
 
 ## GitHub Pages

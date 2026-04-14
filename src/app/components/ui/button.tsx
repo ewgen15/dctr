@@ -4,6 +4,12 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "./utils";
 
+/**
+ * Кнопка на базі Radix Slot + CVA; стилі узгоджені з семантичною темою (`untitled-tokens.css`).
+ *
+ * @see https://www.untitledui.com/react/docs/components/button — Untitled UI React (орієнтир для варіантів)
+ * @see https://www.figma.com/design/AoYmfbYqtUXcz8zUqmVLbb?node-id=1038-34411 — **Button** (COMPONENT_SET) у бібліотеці Untitled UI FREE у Figma
+ */
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {

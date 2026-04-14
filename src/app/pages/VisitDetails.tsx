@@ -1,8 +1,10 @@
-import { ArrowLeft, Calendar, Clock, MapPin, Download, ChevronUp } from 'lucide-react';
+import { Calendar, Clock, MapPin, Download, ChevronUp } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useMemo, useState } from 'react';
+import { useI18n } from '../i18n';
 import StatusBar from '../components/StatusBar';
 import MobileContainer from '../components/MobileContainer';
+import { ScreenHeader } from '../components/ScreenHeader';
 import OrderMedicinesSheet from '../components/OrderMedicinesSheet';
 import { VisitCard } from '../components/VisitCard';
 import {
@@ -12,6 +14,7 @@ import {
 } from '../data/prescribedMedications';
 
 export default function VisitDetails() {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(true);
   const [orderMedicinesOpen, setOrderMedicinesOpen] = useState(false);
@@ -27,13 +30,12 @@ export default function VisitDetails() {
       <div className="min-h-screen bg-secondary pb-8">
         <StatusBar />
 
-        {/* Header */}
-        <div className="px-5 py-4 flex items-center bg-card mb-6">
-          <button onClick={() => navigate('/visits')} className="text-primary mr-4">
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <h1 className="text-xl font-semibold">Деталі візиту</h1>
-        </div>
+        <ScreenHeader
+          variant="backTitle"
+          title={t('visitDetails.title')}
+          onBack={() => navigate('/visits')}
+          className="mb-6"
+        />
 
         <div className="px-5 space-y-4">
           {/* Doctor Info Card */}
@@ -56,41 +58,41 @@ export default function VisitDetails() {
           {/* Diagnosis Section */}
           <div className="bg-primary/10 rounded-2xl p-4">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-base">Діагноз</h3>
+              <h3 className="font-semibold text-base">{t('visitDetails.diagnosis')}</h3>
               <span className="px-2 py-1 bg-card text-primary text-xs font-medium rounded">
-                МКХ: K03.6
+                {t('visitDetails.icd')} K03.6
               </span>
             </div>
-            <p className="text-sm text-foreground">Зубний камінь, гінгівіт легкого ступеня</p>
+            <p className="text-sm text-foreground">{t('visitDetails.demoDiagnosisBody')}</p>
           </div>
 
           {/* Doctor's Conclusion */}
           <div className="bg-card rounded-2xl p-4 shadow-sm">
-            <h3 className="font-semibold text-base mb-3">Висновок лікаря</h3>
+            <h3 className="font-semibold text-base mb-3">{t('visitDetails.conclusion')}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Проведено професійну чистку зубів. Виявлено відкладення зубного каменю на нижній щелепі та початкові ознаки запалення ясен. Рекомендовано дотримуватися гігієни порожнини рота та профілактичні огляди кожні 6 місяців.
+              {t('visitDetails.demoConclusion')}
             </p>
           </div>
 
           {/* Recommendations */}
           <div className="bg-primary/10 rounded-2xl p-4">
-            <h3 className="font-semibold text-base mb-3">Рекомендації</h3>
+            <h3 className="font-semibold text-base mb-3">{t('visitDetails.recommendations')}</h3>
             <ol className="space-y-2 text-sm text-foreground">
               <li className="flex gap-2">
                 <span className="font-medium">1.</span>
-                <span>Чистити зуби двічі на день мінімум 2 хвилини</span>
+                <span>{t('visitDetails.rec1')}</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-medium">2.</span>
-                <span>Використовувати зубну нитку щодня</span>
+                <span>{t('visitDetails.rec2')}</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-medium">3.</span>
-                <span>Полоскати рот антисептичним ополіскувачем</span>
+                <span>{t('visitDetails.rec3')}</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-medium">4.</span>
-                <span>Обмежити вживання цукру та кислих продуктів</span>
+                <span>{t('visitDetails.rec4')}</span>
               </li>
             </ol>
           </div>
@@ -99,9 +101,9 @@ export default function VisitDetails() {
           {isExpanded && (
             <div className="bg-card rounded-2xl p-4 shadow-sm">
               <div className="flex items-center justify-between mb-4 gap-2">
-                <h3 className="font-semibold text-base">Призначені ліки</h3>
+                <h3 className="font-semibold text-base">{t('visitDetails.prescribedMeds')}</h3>
                 <span className="text-primary font-semibold text-right shrink-0">
-                  ~{orderTotalRange.min}–{orderTotalRange.max} грн
+                  ~{orderTotalRange.min}–{orderTotalRange.max} {t('common.uah')}
                 </span>
               </div>
 
@@ -115,12 +117,12 @@ export default function VisitDetails() {
                           <div className="min-w-0 flex-1">
                             <h4 className="font-medium text-sm leading-snug">{active.name}</h4>
                             <p className="mt-1 text-xs text-muted-foreground">
-                              <span className="text-foreground/80">За призначенням лікаря: </span>
+                              <span className="text-foreground/80">{t('visitDetails.perDoctor')} </span>
                               {med.quantityLabel}
                             </p>
                           </div>
                           <span className="text-sm font-semibold text-primary shrink-0 self-start">
-                            {active.priceMin}–{active.priceMax} грн
+                            {active.priceMin}–{active.priceMax} {t('common.uah')}
                           </span>
                         </div>
                       </div>
@@ -133,7 +135,7 @@ export default function VisitDetails() {
                 onClick={() => setOrderMedicinesOpen(true)}
                 className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-medium flex items-center justify-center gap-2 mb-3"
               >
-                Забронювати
+                {t('visitDetails.reserve')}
                 <span>→</span>
               </button>
 
@@ -141,7 +143,7 @@ export default function VisitDetails() {
                 onClick={() => setIsExpanded(false)}
                 className="w-full text-muted-foreground py-2 flex items-center justify-center gap-2 text-sm"
               >
-                Згорнути
+                {t('visitDetails.collapse')}
                 <ChevronUp className="w-4 h-4" />
               </button>
             </div>
@@ -153,20 +155,20 @@ export default function VisitDetails() {
                 onClick={() => setIsExpanded(true)}
                 className="w-full text-primary font-medium text-sm"
               >
-                Показати призначені ліки
+                {t('visitDetails.showMeds')}
               </button>
             </div>
           )}
 
           {/* Next Visit */}
           <div className="bg-card rounded-2xl p-4 shadow-sm">
-            <h3 className="font-semibold text-base mb-2">Наступний візит</h3>
-            <p className="text-sm text-muted-foreground">7 квітня 2026</p>
+            <h3 className="font-semibold text-base mb-2">{t('visitDetails.nextVisit')}</h3>
+            <p className="text-sm text-muted-foreground">{t('visitDetails.nextVisitDate')}</p>
           </div>
 
           {/* Documents */}
           <div className="bg-card rounded-2xl p-4 shadow-sm">
-            <h3 className="font-semibold text-base mb-4">Документи</h3>
+            <h3 className="font-semibold text-base mb-4">{t('visitDetails.documents')}</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-muted rounded-xl">
                 <div className="flex items-center gap-3">
@@ -175,7 +177,7 @@ export default function VisitDetails() {
                       <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
                     </svg>
                   </div>
-                  <span className="text-sm">Висновок_10.02.2026.pdf</span>
+                  <span className="text-sm">{t('visitDetails.doc1')}</span>
                 </div>
                 <button className="text-primary">
                   <Download className="w-5 h-5" />
@@ -189,7 +191,7 @@ export default function VisitDetails() {
                       <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
                     </svg>
                   </div>
-                  <span className="text-sm">УЗД_щитоподібної.pdf</span>
+                  <span className="text-sm">{t('visitDetails.doc2')}</span>
                 </div>
                 <button className="text-primary">
                   <Download className="w-5 h-5" />
@@ -203,7 +205,7 @@ export default function VisitDetails() {
                       <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
                     </svg>
                   </div>
-                  <span className="text-sm">Аналізи_гормони.pdf</span>
+                  <span className="text-sm">{t('visitDetails.doc3')}</span>
                 </div>
                 <button className="text-primary">
                   <Download className="w-5 h-5" />
@@ -212,7 +214,7 @@ export default function VisitDetails() {
             </div>
 
             <div className="mt-4 pt-4 border-t border-border">
-              <p className="text-xs text-muted-foreground">рецепт на ліки</p>
+              <p className="text-xs text-muted-foreground">{t('visitDetails.recipeNote')}</p>
             </div>
           </div>
         </div>

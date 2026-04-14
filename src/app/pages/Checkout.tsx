@@ -1,5 +1,4 @@
 import {
-  ArrowLeft,
   Building2,
   CreditCard,
   MapPin,
@@ -12,8 +11,10 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import { useI18n } from '../i18n';
 import StatusBar from '../components/StatusBar';
 import MobileContainer from '../components/MobileContainer';
+import { ScreenHeader } from '../components/ScreenHeader';
 import {
   buildInitialCheckoutLines,
   linePiecesTotal,
@@ -36,6 +37,7 @@ function isCheckoutState(x: unknown): x is CheckoutLocationState {
 }
 
 export default function Checkout() {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const location = useLocation();
   const state = isCheckoutState(location.state) ? location.state : null;
@@ -84,25 +86,25 @@ export default function Checkout() {
 
   if (submitted) {
     const payHint =
-      payment === 'card'
-        ? 'Оплата онлайн карткою — надішлемо посилання або підказку в повідомленні.'
-        : 'Оплата в аптеці при отриманні — готівка або термінал на місці.';
+      payment === 'card' ? t('checkout.payCardHint') : t('checkout.payPharmacyHint');
     return (
       <MobileContainer>
         <div className="min-h-screen bg-secondary pb-8">
           <StatusBar />
           <div className="px-5 py-8">
             <div className="rounded-2xl bg-card p-6 shadow-sm">
-              <h1 className="text-xl font-semibold text-foreground">Замовлення прийнято</h1>
+              <h1 className="text-xl font-semibold text-foreground">
+                {t('checkout.orderAccepted')}
+              </h1>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                Аптека «{pharmacy.name}» отримає ваше замовлення. {payHint}
+                {t('checkout.orderAcceptedBody', { name: pharmacy.name, hint: payHint })}
               </p>
               <button
                 type="button"
                 onClick={() => navigate('/visits')}
                 className="mt-6 w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground"
               >
-                До моїх записів
+                {t('checkout.toVisits')}
               </button>
             </div>
           </div>
@@ -116,17 +118,12 @@ export default function Checkout() {
       <div className="min-h-screen bg-secondary pb-28">
         <StatusBar />
 
-        <div className="sticky top-0 z-10 flex items-center gap-3 bg-card px-5 py-4 shadow-sm">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="text-primary"
-            aria-label="Назад"
-          >
-            <ArrowLeft className="size-6" />
-          </button>
-          <h1 className="text-lg font-semibold">Оформлення замовлення</h1>
-        </div>
+        <ScreenHeader
+          variant="backTitle"
+          title={t('checkout.title')}
+          onBack={() => navigate(-1)}
+          sticky
+        />
 
         <div className="space-y-4 px-5 pt-4">
           <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
@@ -136,7 +133,7 @@ export default function Checkout() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Аптека
+                  {t('checkout.pharmacy')}
                 </p>
                 <h2 className="text-base font-semibold leading-snug text-foreground">
                   {pharmacy.name}
@@ -157,19 +154,19 @@ export default function Checkout() {
                   {pharmacy.hasDelivery && (
                     <span className="inline-flex items-center gap-1">
                       <Truck className="size-3.5" />
-                      Доставка
+                      {t('checkout.delivery')}
                     </span>
                   )}
                 </div>
                 <p className="mt-2 text-sm font-semibold text-primary">
-                  Орієнтовно по прайсу аптеки: ~{pharmacy.totalPrice} грн
+                  {t('checkout.priceEstimate', { price: pharmacy.totalPrice })}
                 </p>
               </div>
             </div>
           </section>
 
           <section>
-            <h3 className="mb-2 text-sm font-semibold text-foreground">Ваше замовлення</h3>
+            <h3 className="mb-2 text-sm font-semibold text-foreground">{t('checkout.yourOrder')}</h3>
             <ul className="space-y-3">
               {lines.map((line) => {
                 const pieces = linePiecesTotal(line);
@@ -184,35 +181,41 @@ export default function Checkout() {
                           {line.name}
                         </p>
                         <p className="mt-1 text-xs text-muted-foreground">
-                          За призначенням: {line.quantityLabel}
+                          {t('checkout.asPrescribed')} {line.quantityLabel}
                         </p>
                         <p className="mt-1 text-xs text-muted-foreground">
-                          {line.packCount} уп × {line.piecesPerPack} шт ={' '}
-                          <span className="font-medium text-foreground">{pieces} шт</span>
+                          {t('checkout.packsLine', {
+                            packs: line.packCount,
+                            pieces: line.piecesPerPack,
+                            total: pieces,
+                          })}
                         </p>
                         <p className="mt-2 text-sm text-foreground">
-                          {line.priceMin}–{line.priceMax} грн за уп · усього ~{lineSubtotalMid(line)}{' '}
-                          грн
+                          {t('checkout.pricePerPack', {
+                            min: line.priceMin,
+                            max: line.priceMax,
+                            mid: lineSubtotalMid(line),
+                          })}
                         </p>
                       </div>
                       <button
                         type="button"
                         onClick={() => removeLine(line.lineId)}
                         className="shrink-0 rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                        aria-label="Видалити позицію"
+                        aria-label={t('checkout.removeLine')}
                       >
                         <Trash2 className="size-5" />
                       </button>
                     </div>
                     <div className="mt-3 flex items-center gap-3">
-                      <span className="text-xs text-muted-foreground">Кількість упаковок</span>
+                      <span className="text-xs text-muted-foreground">{t('checkout.packCount')}</span>
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
                           onClick={() => updatePackCount(line.lineId, -1)}
                           disabled={line.packCount <= 1}
                           className="flex size-10 items-center justify-center rounded-lg border border-border bg-background disabled:opacity-40"
-                          aria-label="Менше"
+                          aria-label={t('checkout.less')}
                         >
                           <Minus className="size-4" />
                         </button>
@@ -224,7 +227,7 @@ export default function Checkout() {
                           onClick={() => updatePackCount(line.lineId, 1)}
                           disabled={line.packCount >= 99}
                           className="flex size-10 items-center justify-center rounded-lg border border-border bg-background disabled:opacity-40"
-                          aria-label="Більше"
+                          aria-label={t('checkout.more')}
                         >
                           <Plus className="size-4" />
                         </button>
@@ -236,21 +239,17 @@ export default function Checkout() {
             </ul>
             {lines.length === 0 && (
               <p className="rounded-xl border border-dashed border-border bg-muted/40 px-4 py-6 text-center text-sm text-muted-foreground">
-                Немає позицій у замовленні. Поверніться назад і оберіть препарати.
+                {t('checkout.emptyCart')}
               </p>
             )}
           </section>
 
           <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-foreground">
-            <p>
-              <strong>Бронь</strong> зарезервованих ліків у цій аптеці зазвичай діє{' '}
-              <strong>2 доби</strong>. Після підтвердження надішлемо повідомлення з деталями
-              отримання.
-            </p>
+            <p>{t('checkout.holdNote')}</p>
           </div>
 
           <section>
-            <h3 className="mb-2 text-sm font-semibold text-foreground">Спосіб оплати</h3>
+            <h3 className="mb-2 text-sm font-semibold text-foreground">{t('checkout.payment')}</h3>
             <div className="flex flex-col gap-2">
               <button
                 type="button"
@@ -263,7 +262,7 @@ export default function Checkout() {
                 )}
               >
                 <CreditCard className="size-5 shrink-0 text-primary" />
-                <span>Оплатити карткою онлайн</span>
+                <span>{t('checkout.payCard')}</span>
               </button>
               <button
                 type="button"
@@ -276,19 +275,19 @@ export default function Checkout() {
                 )}
               >
                 <Building2 className="size-5 shrink-0 text-primary" />
-                <span>Оплатити в аптеці при отриманні</span>
+                <span>{t('checkout.payPharmacy')}</span>
               </button>
             </div>
           </section>
 
           <section className="rounded-2xl border border-border bg-card p-4">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Орієнтовно разом</span>
-              <span className="text-lg font-bold text-primary">~{orderTotalMid} грн</span>
+              <span className="text-muted-foreground">{t('checkout.totalEstimate')}</span>
+              <span className="text-lg font-bold text-primary">
+                ~{orderTotalMid} {t('common.uah')}
+              </span>
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Фактична сума може відрізнятися залежно від цін у аптеці на момент видачі.
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">{t('checkout.totalDisclaimer')}</p>
           </section>
         </div>
 
@@ -299,7 +298,7 @@ export default function Checkout() {
             onClick={handleConfirm}
             className="flex min-h-12 w-full items-center justify-center rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground disabled:opacity-45"
           >
-            Підтвердити замовлення
+            {t('checkout.confirm')}
           </button>
         </div>
       </div>

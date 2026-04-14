@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from 'react';
 import { useNavigate } from 'react-router';
+import { useI18n } from '../i18n';
 import {
   Drawer,
   DrawerClose,
@@ -45,6 +46,7 @@ export default function OrderMedicinesSheet({
   selectedOptionByMedId: selectedProp,
   onSelectedOptionChange,
 }: OrderMedicinesSheetProps) {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const [sortBy, setSortBy] = useState<SortBy>('distance');
   const [pharmacyView, setPharmacyView] = useState<PharmacyView>('list');
@@ -137,15 +139,15 @@ export default function OrderMedicinesSheet({
           <DrawerHeader className="flex flex-row items-start justify-between gap-4 pb-2 pt-1 px-5">
             <div className="flex-1 pr-8">
               <DrawerTitle className="text-xl font-bold text-foreground">
-                Замовити ліки
+                {t('orderSheet.title')}
               </DrawerTitle>
               <DrawerDescription className="text-sm text-muted-foreground mt-0.5">
-                {PRESCRIBED_MEDS.length} препарат(ів) з призначення
+                {t('orderSheet.subtitle', { count: PRESCRIBED_MEDS.length })}
               </DrawerDescription>
             </div>
             <DrawerClose
               className="absolute top-5 right-5 rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
-              aria-label="Закрити"
+              aria-label={t('common.close')}
             >
               <X className="w-5 h-5" />
             </DrawerClose>
@@ -158,10 +160,10 @@ export default function OrderMedicinesSheet({
                   <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                     <Pill className="w-4 h-4 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-foreground">Ваше призначення</h3>
+                  <h3 className="font-semibold text-foreground">{t('orderSheet.yourPrescription')}</h3>
                 </div>
                 <span className="text-primary font-semibold text-right shrink-0">
-                  ~{orderTotalRange.min}–{orderTotalRange.max} грн
+                  ~{orderTotalRange.min}–{orderTotalRange.max} {t('common.uah')}
                 </span>
               </div>
 
@@ -175,9 +177,9 @@ export default function OrderMedicinesSheet({
                           type="button"
                           onClick={() => setAlternativesMedId(med.id)}
                           className="flex w-full justify-center bg-primary/10 py-1.5 text-xs font-medium leading-[18px] text-primary transition-colors hover:bg-primary/15"
-                          aria-label="Змінити препарат серед альтернатив"
+                          aria-label={t('orderSheet.changeMedAria')}
                         >
-                          Змінити
+                          {t('orderSheet.changeMed')}
                         </button>
                         <div className="bg-muted/50 p-3">
                           <div className="flex flex-wrap items-start justify-between gap-2">
@@ -186,12 +188,12 @@ export default function OrderMedicinesSheet({
                                 {active.name}
                               </span>
                               <p className="mt-1 text-xs text-muted-foreground">
-                                <span className="text-foreground/80">За призначенням лікаря: </span>
+                                <span className="text-foreground/80">{t('orderSheet.perDoctor')} </span>
                                 {med.quantityLabel}
                               </p>
                             </div>
                             <span className="text-sm font-semibold text-primary shrink-0 self-start">
-                              {active.priceMin}–{active.priceMax} грн
+                              {active.priceMin}–{active.priceMax} {t('common.uah')}
                             </span>
                           </div>
                         </div>
@@ -203,11 +205,13 @@ export default function OrderMedicinesSheet({
             </section>
 
             <section>
-              <p className="text-sm font-medium text-foreground mb-2">Аптеки поруч</p>
+              <p className="text-sm font-medium text-foreground mb-2">
+                {t('orderSheet.pharmaciesNearby')}
+              </p>
               <div
                 className="mb-3 flex rounded-xl border border-border bg-muted/40 p-1"
                 role="tablist"
-                aria-label="Вигляд: список або карта"
+                aria-label={t('orderSheet.viewToggle')}
               >
                 <button
                   type="button"
@@ -221,7 +225,7 @@ export default function OrderMedicinesSheet({
                   }`}
                 >
                   <List className="size-4 shrink-0" />
-                  Список
+                  {t('orderSheet.list')}
                 </button>
                 <button
                   type="button"
@@ -235,13 +239,13 @@ export default function OrderMedicinesSheet({
                   }`}
                 >
                   <MapIcon className="size-4 shrink-0" />
-                  Карта
+                  {t('orderSheet.map')}
                 </button>
               </div>
 
               {pharmacyView === 'list' && (
                 <>
-                  <p className="text-sm text-foreground mb-2">Сортувати:</p>
+                  <p className="text-sm text-foreground mb-2">{t('orderSheet.sort')}</p>
                   <div className="mb-3 flex gap-2">
                     <button
                       type="button"
@@ -252,7 +256,7 @@ export default function OrderMedicinesSheet({
                           : 'bg-card text-primary border border-primary'
                       }`}
                     >
-                      За відстанню
+                      {t('orderSheet.byDistance')}
                     </button>
                     <button
                       type="button"
@@ -263,7 +267,7 @@ export default function OrderMedicinesSheet({
                           : 'bg-card text-primary border border-primary'
                       }`}
                     >
-                      За ціною
+                      {t('orderSheet.byPrice')}
                     </button>
                   </div>
 
@@ -281,12 +285,12 @@ export default function OrderMedicinesSheet({
                             {pharmacy.hasDelivery && (
                               <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                                 <Truck className="w-3.5 h-3.5" />
-                                Доставка
+                                {t('orderSheet.delivery')}
                               </span>
                             )}
                           </div>
                           <span className="text-primary font-bold text-lg shrink-0">
-                            ~{pharmacy.totalPrice} грн
+                            ~{pharmacy.totalPrice} {t('common.uah')}
                           </span>
                         </div>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground mb-2">
@@ -313,13 +317,13 @@ export default function OrderMedicinesSheet({
                                 : 'bg-destructive/20 text-destructive'
                             }`}
                           >
-                            {pharmacy.isOpen ? 'Відчинено' : 'Закрито'}
+                            {pharmacy.isOpen ? t('orderSheet.open') : t('orderSheet.closed')}
                           </span>
                         </div>
                         {pharmacy.allAvailable && (
                           <div className="flex items-center gap-2 text-sm text-success">
                             <CheckCircle2 className="w-4 h-4 shrink-0" />
-                            <span>Всі препарати в наявності</span>
+                            <span>{t('orderSheet.allInStock')}</span>
                           </div>
                         )}
                         <button
@@ -327,7 +331,7 @@ export default function OrderMedicinesSheet({
                           onClick={() => goToCheckout(pharmacy)}
                           className="mt-4 w-full min-h-12 rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground"
                         >
-                          Замовити
+                          {t('orderSheet.order')}
                         </button>
                       </div>
                     ))}
@@ -338,16 +342,14 @@ export default function OrderMedicinesSheet({
               {pharmacyView === 'map' && !pharmacyMapOpen && (
                 <div className="rounded-xl border border-dashed border-border bg-muted/30 px-4 py-6 text-center">
                   <MapIcon className="mx-auto mb-2 size-10 text-primary opacity-80" />
-                  <p className="text-sm font-medium text-foreground">Карта Києва</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Аптеки з цінами на мапі. Натисніть, щоб відкрити знову.
-                  </p>
+                  <p className="text-sm font-medium text-foreground">{t('orderSheet.mapKyiv')}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{t('orderSheet.mapHint')}</p>
                   <button
                     type="button"
                     onClick={() => setPharmacyMapOpen(true)}
                     className="mt-4 w-full min-h-12 rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground"
                   >
-                    Показати карту
+                    {t('orderSheet.showMap')}
                   </button>
                 </div>
               )}
